@@ -88,6 +88,7 @@ export default function Home() {
         setIsOwner(true);
       }
       setSigner(signer);
+      window.location.reload();
     } catch (error) {
       console.error("User rejected the request:", error);
     }
