@@ -1,124 +1,300 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import { useState, useEffect } from "react";
+import { ballotContract, getSigner } from "../ethereum/utils/contract";
+import Link from 'next/link';
+import { useSigner } from "@/context/SignerContext";
+import { ethers } from "ethers";
 
 export default function Home() {
+  const [signer, setSigner] = useSigner();
+  const [candidateNominationNo, setCandidateNominationNo] = useState("");
+  const [isOwner, setIsOwner] = useState(false)
+  const [candidateList, setCandidateList] = useState([]);
+  const [registered, setRegistered] = useState(false);
+  const [saudiId, setSaudiId] = useState("");
+  const [voterConstituencyCode, setVoterConstituencyCode] = useState("");
+  const [voterStateCode, setVoterStateCode] = useState("");
+  // const [voterSaudiId, setVoterSaudiId] = useState("");
+  const [votingOpen, setVotingOpen] = useState(false);
+  const [secondsToStartTime, setSecondsToStartTime] = useState(0);
+  const [secondsToEnd, setSecondsToEnd] = useState(0);
+
+
+
+  useEffect(() => {
+    const loadOwner = async () => {
+      try {
+        const owner = await ballotContract.owner();
+        // console.log("Owner:", owner);
+        const signer = await getSigner();
+        setSigner(signer);
+
+        if (signer.address === owner) {
+          setIsOwner(true);
+        }
+
+        const saudiId = await ballotContract.connect(signer).getVoterSaudiId()
+        console.log("Saudi ID: ", saudiId);
+        if (saudiId !== 0) {
+          setRegistered(true);
+        }
+
+        const timeTillVoteOpens = Number(await ballotContract.getSecondsToStartTime());
+        // console.log("Time till vote opens:", timeTillVoteOpens);
+        if (timeTillVoteOpens > 0) {
+          setVotingOpen(false);
+        } else {
+          setVotingOpen(true);
+        }
+
+      } catch (error) {
+        console.error("Error while loading initial state:", error);
+      }
+    }
+
+    loadOwner();
+  }, [])
+
+  useEffect(() => {
+    if (signer) {
+      fetchCandidates();
+      fetchVotingDetails();
+    }
+  }, [signer]);
+
+  const connectMetaMask = async () => {
+    try {
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      let signer = await getSigner();
+      let owner = await getOwner();
+
+      if (signer.address === owner) {
+        setIsOwner(true);
+      }
+      setSigner(signer);
+    } catch (error) {
+      console.error("User rejected the request:", error);
+    }
+  };
+
+  async function fetchVotingDetails() {
+    try {
+      const secondsToStart = await ballotContract.getSecondsToStartTime();
+      const endTime = await ballotContract.getVotingEndTime();
+      const current = await ballotContract.getCurrentTimestamp();
+
+      console.log( "endTime: ", Number(endTime), " current: ", Number(current))
+
+      setSecondsToStartTime(Number(secondsToStart));
+      const seconds = Number(endTime) - Number(current);
+      setSecondsToEnd(seconds > 0 ? seconds : 0);
+    } catch (error) {
+      console.error("Error while fetching voting details:", error);
+    }
+  }
+
+
+  const handleVote = async () => {
+    if (!signer) {
+      alert("Please connect to MetaMask first");
+      return;
+    }
+
+    if (!ballotContract) {
+      alert("Ethereum provider not available");
+      return;
+    }
+
+    try {
+      const tx = await ballotContract.connect(signer).vote(candidateNominationNo);
+      await tx.wait();
+      alert("Vote submitted successfully!");
+    } catch (error) {
+      console.error("Error while submitting vote:", error);
+    }
+  };
+
+  const handleRegisterVoter = async () => {
+    if (!signer) {
+      alert("Please connect to MetaMask first");
+      return;
+    }
+
+    if (!ballotContract) {
+      alert("Ethereum provider not available");
+      return;
+    }
+
+    const voterArgs = {
+      _SaudiId: parseInt(saudiId, 10),
+      _voterAddress: signer.address,
+      constituencyCode: parseInt(voterConstituencyCode, 10),
+      stateCode: parseInt(voterStateCode, 10),
+    };
+
+    try {
+      const tx = await ballotContract.connect(signer).registerVoter(voterArgs);
+      await tx.wait();
+      alert("Voter registered successfully!");
+
+      setRegistered(true);
+    } catch (error) {
+      console.error("Error while registering voter:", error);
+    }
+  };
+
+  const getOwner = async () => {
+    if (!ballotContract) {
+      alert("Ethereum provider not available");
+      return;
+    }
+
+    try {
+      const owner = await ballotContract.owner();
+      console.log("Owner:", owner);
+      return owner;
+    } catch (error) {
+      console.error("Error while getting owner:", error);
+    }
+  };
+
+  const fetchCandidates = async () => {
+    if (!signer) {
+      alert("Please connect to MetaMask first");
+      return;
+    }
+
+    if (!ballotContract) {
+      alert("Ethereum provider not available");
+      return;
+    }
+
+    try {
+      const voterSaudiId = await ballotContract.connect(signer).getVoterSaudiId();
+      if (!voterSaudiId) {
+        setRegistered(false);
+      } else {
+        // const candidates = await ballotContract.getCandidateList(voterSaudiId); // @amaechi - we need to change way the smart contract returns the array of candidates
+
+        const candidateCount = await ballotContract.candidateCount();
+        const candidates = [];
+
+        for (let i = 1; i < parseInt(candidateCount) + 1; i++) {
+          const candidateData = await ballotContract._candidate(i);
+          const candidate = {
+            voteCount: candidateData[0],
+            nominationNo: candidateData[1],
+            name: candidateData[2],
+            partyShortcut: candidateData[3],
+            partyFlag: candidateData[4],
+            stateCode: candidateData[5],
+            constituencyCode: candidateData[6],
+          };
+          candidates.push(candidate);
+        }
+
+        console.log("Candidates:", candidates)
+        setCandidateList(candidates);
+      }
+    } catch (error) {
+      console.error("Error while fetching candidates:", error);
+    }
+  };
+
+  const renderCandidates = () => {
+    return candidateList.map((candidate, index) => (
+      <div key={index} className="p-4 border-b">
+        <h3 className="font-bold">{candidate.name}</h3>
+        <p>Nomination No: {Number(candidate.nominationNo)}</p>
+        <p>Party: {candidate.partyShortcut}</p>
+        <p>Party Flag: {candidate.partyFlag}</p>
+        <p>State Code: {Number(candidate.stateCode)}</p>
+        <p>Constituency Code: {Number(candidate.constituencyCode)}</p>
+      </div>
+    ));
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-6 text-center">Ballot</h1>
+        {signer && (
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mt-10">
+            <h2 className="text-xl font-bold mb-6 text-center">Candidates</h2>
+            {renderCandidates()}
+          </div>
+        )}
+        {signer && (
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-md mt-4">
+            <h2 className="text-xl font-bold mb-4 text-center">Voting Details</h2>
+            <p>Seconds to start time: {secondsToStartTime}</p>
+            <p>Seconds to end time: {secondsToEnd}</p>
+          </div>
+        )}
+        <br />
+        {!signer?.address && (
+          <button
+            onClick={connectMetaMask}
+            className="bg-blue-600 text-white px-6 py-2 rounded font-medium w-full mb-4"
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+            Connect to MetaMask
+          </button>
+        )}
+        {!registered ? (
+          <>
+            <h2 className="text-xl font-bold mb-6 text-center">Register as a Voter</h2>
+            <input
+              type="number"
+              placeholder="Saudi ID"
+              value={saudiId}
+              onChange={(e) => setSaudiId(e.target.value)}
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg mb-4"
             />
-          </a>
-        </div>
+            <input
+              type="number"
+              placeholder="Constituency Code"
+              value={voterConstituencyCode}
+              onChange={(e) => setVoterConstituencyCode(e.target.value)}
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg mb-4"
+            />
+            <input
+              type="number"
+              placeholder="State Code"
+              value={voterStateCode}
+              onChange={(e) => setVoterStateCode(e.target.value)}
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg mb-4"
+            />
+            <button
+              onClick={handleRegisterVoter}
+              className="bg-green-600 text-white px-6 py-2 rounded font-medium w-full"
+            >
+              Register
+            </button>
+          </>
+        ) : null}
+        {registered ?
+          <div className="mb-4">
+            <input
+              type="number"
+              placeholder="Candidate Nomination No"
+              value={candidateNominationNo}
+              onChange={(e) => setCandidateNominationNo(e.target.value)}
+              className="bg-gray-100 border-2 w-full p-4 rounded-lg"
+            />
+          </div> : null}
+        {registered && votingOpen ?
+          <button
+            onClick={handleVote}
+            className="bg-green-600 text-white px-6 py-2 rounded font-medium w-full"
+          >
+            Vote
+          </button> : null}
+        {signer ?
+          isOwner ? <Link href="/Admin" className="bg-blue-500 text-white px-4 py-2 mt-6 rounded font-medium w-full inline-block text-center">
+            Go to Admin
+          </Link> : null : null
+        }
       </div>
+    </div>
+  );
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
 }
