@@ -65,8 +65,25 @@ export default function Home() {
     try {
       await window.ethereum.request({ method: "eth_requestAccounts" });
       let signer = await getSigner();
+  
+      // Check network and request to change it if it's not Sepolia
+      const network = await signer.provider.getNetwork();
+      const sepoliaChainId = 11155111; // Sepolia Testnet Chain ID
+      if (network.chainId !== sepoliaChainId) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: `0x${sepoliaChainId.toString(16)}` }],
+          });
+          // Re-fetch signer after switching the network
+          signer = await getSigner();
+        } catch (switchError) {
+          console.error("Error switching to Sepolia:", switchError);
+        }
+      }
+  
       let owner = await getOwner();
-
+  
       if (signer.address === owner) {
         setIsOwner(true);
       }
@@ -75,6 +92,7 @@ export default function Home() {
       console.error("User rejected the request:", error);
     }
   };
+  
 
   async function fetchVotingDetails() {
     try {
