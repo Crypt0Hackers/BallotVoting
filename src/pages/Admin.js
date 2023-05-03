@@ -21,7 +21,7 @@ export default function Admin() {
     useEffect(() => {
 
         if (!signer || !ballotContract) {
-            router.push("/");
+            router.push("/home");
         }
         // console.log("Signer:", signer);
         // console.log("Ballot Contract:", ballotContract);
