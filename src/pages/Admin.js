@@ -71,35 +71,35 @@ export default function Admin() {
                     <input
                         type="text"
                         placeholder="Candidate Name"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Party ShortCut"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={partyShortCut}
                         onChange={(e) => setPartyShortCut(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Party Flag"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={partyFlag}
                         onChange={(e) => setPartyFlag(e.target.value)}
                     />
                     <input
                         type="number"
                         placeholder="State Code"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={stateCode}
                         onChange={(e) => setStateCode(e.target.value)}
                     />
                     <input
                         type="number"
                         placeholder="Constituency Code"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={constituencyCode}
                         onChange={(e) => setConstituencyCode(e.target.value)}
                     />
@@ -107,7 +107,7 @@ export default function Admin() {
                     <input
                         type="text"
                         placeholder="Start Time"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={startTime}
                         onChange={(e) => setStartTime(e.target.value)}
                     />
@@ -115,7 +115,7 @@ export default function Admin() {
                     <input
                         type="text"
                         placeholder="End Time"
-                        className="w-full border border-gray-300 p-2 rounded"
+                        className="w-full border border-gray-300 p-2 rounded text-black"
                         value={endTime}
                         onChange={(e) => setEndTime(e.target.value)}
                     />

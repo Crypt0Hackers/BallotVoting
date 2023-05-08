@@ -1,18 +1,27 @@
 // pages/index.js
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { isUserAtLeast18 } from "../utils/ageRestriction.js";
 
 export default function Home() {
     const [dataURL, setDataURL] = useState("");
     const [token, setToken] = useState("");
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const [ageCheck, setAgeCheck] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
 
     const router = useRouter();
 
     const register = async () => {
+
+        if (!isUserAtLeast18(dateOfBirth)) {
+            setAgeCheck("You must be at least 18 years old");
+            return
+        }
+
         const res = await fetch("/api/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -42,7 +51,7 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <div className="bg-white p-8 text-black rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
                 <input
                     type="text"
@@ -58,6 +67,18 @@ export default function Home() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="bg-gray-100 border-2 w-full p-4 rounded-lg mb-4"
                 />
+                <input
+                    type="date"
+                    placeholder="Date of Birth"
+                    value={dateOfBirth}
+                    onChange={(e) => setDateOfBirth(e.target.value)}
+                    className="bg-gray-100 border-2 w-full p-4 rounded-lg mb-4"
+                />
+                {ageCheck && (
+                    <p className="text-red-500 text-xs text-center">
+                        {ageCheck}
+                    </p>
+                )}
                 <button
                     onClick={register}
                     className="bg-green-600 text-white px-6 py-2 rounded font-medium w-full mb-4"

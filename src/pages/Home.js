@@ -233,17 +233,17 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-100 text-black flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Ballot</h1>
         {signer && (
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mt-10">
+          <div className="bg-white text-black p-8 rounded-lg shadow-lg w-full max-w-3xl mt-10">
             <h2 className="text-xl font-bold mb-6 text-center">Candidates</h2>
             {renderCandidates()}
           </div>
         )}
         {signer && (
-          <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-md mt-4">
+          <div className="bg-white p-4 text-black rounded-lg shadow-lg w-full max-w-md mt-4">
             <h2 className="text-xl font-bold mb-4 text-center">Voting Details</h2>
             <p>Seconds to start time: {secondsToStartTime}</p>
             <p>Seconds to end time: {secondsToEnd}</p>
