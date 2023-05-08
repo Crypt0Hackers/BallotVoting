@@ -17,8 +17,7 @@ export default function Home() {
   const [votingOpen, setVotingOpen] = useState(false);
   const [secondsToStartTime, setSecondsToStartTime] = useState(0);
   const [secondsToEnd, setSecondsToEnd] = useState(0);
-
-
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadOwner = async () => {
@@ -65,7 +64,7 @@ export default function Home() {
     try {
       await window.ethereum.request({ method: "eth_requestAccounts" });
       let signer = await getSigner();
-  
+
       // Check network and request to change it if it's not Sepolia
       const network = await signer.provider.getNetwork();
       const sepoliaChainId = 11155111; // Sepolia Testnet Chain ID
@@ -81,9 +80,9 @@ export default function Home() {
           console.error("Error switching to Sepolia:", switchError);
         }
       }
-  
+
       let owner = await getOwner();
-  
+
       if (signer.address === owner) {
         setIsOwner(true);
       }
@@ -93,7 +92,7 @@ export default function Home() {
       console.error("User rejected the request:", error);
     }
   };
-  
+
 
   async function fetchVotingDetails() {
     try {
@@ -101,7 +100,7 @@ export default function Home() {
       const endTime = await ballotContract.getVotingEndTime();
       const current = await ballotContract.getCurrentTimestamp();
 
-      console.log( "endTime: ", Number(endTime), " current: ", Number(current))
+      console.log("endTime: ", Number(endTime), " current: ", Number(current))
 
       setSecondsToStartTime(Number(secondsToStart));
       const seconds = Number(endTime) - Number(current);
@@ -128,7 +127,8 @@ export default function Home() {
       await tx.wait();
       alert("Vote submitted successfully!");
     } catch (error) {
-      console.error("Error while submitting vote:", error);
+      setError("Error while submitting vote");
+      console.error(error);
     }
   };
 
@@ -228,6 +228,18 @@ export default function Home() {
         <p>Party Flag: {candidate.partyFlag}</p>
         <p>State Code: {Number(candidate.stateCode)}</p>
         <p>Constituency Code: {Number(candidate.constituencyCode)}</p>
+        <p>
+          Vote Count:{" "}
+          {secondsToEnd > 0 ? (
+            <span className="text-red-500">voting still active</span>
+          ) : (
+            Number(candidate.voteCount) > 0 ? (
+              Number(candidate.voteCount)
+            ) : (
+              0
+            )
+          )}
+        </p>
       </div>
     ));
   };
@@ -307,6 +319,11 @@ export default function Home() {
           >
             Vote
           </button> : null}
+        {error && (
+          <p className="text-red-500 text-s mt-5 text-center">
+            {error}
+          </p>
+        )}
         {signer ?
           isOwner ? <Link href="/Admin" className="bg-blue-500 text-white px-4 py-2 mt-6 rounded font-medium w-full inline-block text-center">
             Go to Admin

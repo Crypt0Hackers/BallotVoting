@@ -142,7 +142,7 @@ export default function Admin() {
                     >
                         Update End Time
                     </button>
-                    <Link href="/" className="bg-blue-500 text-white px-4 py-2 mt-6 rounded font-medium w-full inline-block text-center">
+                    <Link href="/Home" className="bg-blue-500 text-white px-4 py-2 mt-6 rounded font-medium w-full inline-block text-center">
                         Return Home
                     </Link>
                 </div>
