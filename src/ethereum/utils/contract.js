@@ -6,6 +6,7 @@ const getProvider = () => {
     return new ethers.BrowserProvider(window.ethereum);
   } else {
     console.log("Please install MetaMask to use this dApp!");
+    window.alert("Please install MetaMask to use this dApp!");
   }
 };
 
