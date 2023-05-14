@@ -57,10 +57,9 @@ contract Ballot is Ownable{
     /**
     * @dev event called when user submits a vote
     * @param voter - ID of person voting
-    * @param candidateID - ID of candidate being voted for
     * @param totalVotes - Current vote count
     */
-    event NewVote(uint indexed voter, uint indexed candidateID, uint indexed totalVotes);
+    event NewVote(uint indexed voter, uint indexed totalVotes);
 
     /**
     * @dev event called when a candidate is registered
@@ -157,7 +156,7 @@ contract Ballot is Ownable{
         ++_candidate[candidateNominationNo].voteCount;
         ++totalVoteCount;
 
-        emit NewVote(_SaudiId, candidateNominationNo, totalVoteCount);
+        emit NewVote(_SaudiId, totalVoteCount);
     }
 
     /**
@@ -224,6 +223,10 @@ contract Ballot is Ownable{
     }
 
     /* View Functions */
+
+    function getVoterSaudiId() external view returns (uint) {
+        return _voterSaudiId[msg.sender];
+    }
 
     function getCandidateList(uint256 voterSaudiId)
         external

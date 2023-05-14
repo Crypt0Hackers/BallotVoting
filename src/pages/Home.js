@@ -35,6 +35,7 @@ export default function Home() {
         console.log("Saudi ID: ", saudiId);
         if (saudiId !== 0) {
           setRegistered(true);
+          console.log(saudiId)
         }
 
         const timeTillVoteOpens = Number(await ballotContract.getSecondsToStartTime());
