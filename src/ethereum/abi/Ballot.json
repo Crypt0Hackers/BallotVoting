@@ -66,19 +66,19 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "string",
+						"internalType": "bytes32",
 						"name": "name",
-						"type": "string"
+						"type": "bytes32"
 					},
 					{
-						"internalType": "string",
+						"internalType": "bytes32",
 						"name": "partyShortcut",
-						"type": "string"
+						"type": "bytes32"
 					},
 					{
-						"internalType": "string",
+						"internalType": "bytes32",
 						"name": "partyFlag",
-						"type": "string"
+						"type": "bytes32"
 					},
 					{
 						"internalType": "uint32",
@@ -137,6 +137,12 @@
 			{
 				"indexed": true,
 				"internalType": "uint256",
+				"name": "candidateID",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
 				"name": "totalVotes",
 				"type": "uint256"
 			}
@@ -162,228 +168,6 @@
 		],
 		"name": "OwnershipTransferred",
 		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "uint160",
-				"name": "newStartTime",
-				"type": "uint160"
-			}
-		],
-		"name": "StartTimeUpdated",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "nominationNo",
-				"type": "uint256"
-			}
-		],
-		"name": "_candidate",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "voteCount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "nominationNo",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "partyShortcut",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "partyFlag",
-				"type": "string"
-			},
-			{
-				"internalType": "uint32",
-				"name": "stateCode",
-				"type": "uint32"
-			},
-			{
-				"internalType": "uint32",
-				"name": "constituencyCode",
-				"type": "uint32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "candidateCount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "voterSaudiId",
-				"type": "uint256"
-			}
-		],
-		"name": "getCandidateList",
-		"outputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getCandidateResults",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "voteCount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "nominationNo",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "partyShortcut",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "partyFlag",
-						"type": "string"
-					},
-					{
-						"internalType": "uint32",
-						"name": "stateCode",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint32",
-						"name": "constituencyCode",
-						"type": "uint32"
-					}
-				],
-				"internalType": "struct Ballot.Candidate[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getCurrentTimestamp",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "CurrentTimestamp",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getSecondsToStartTime",
-		"outputs": [
-			{
-				"internalType": "uint160",
-				"name": "",
-				"type": "uint160"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getVoterSaudiId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getVotingEndTime",
-		"outputs": [
-			{
-				"internalType": "uint160",
-				"name": "",
-				"type": "uint160"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getVotingStartTime",
-		"outputs": [
-			{
-				"internalType": "uint160",
-				"name": "",
-				"type": "uint160"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -468,17 +252,17 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "totalVoteCount",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"indexed": true,
+				"internalType": "uint160",
+				"name": "newStartTime",
+				"type": "uint160"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
+		"name": "StartTimeUpdated",
+		"type": "event"
 	},
 	{
 		"inputs": [
@@ -530,6 +314,252 @@
 		"name": "vote",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "nominationNo",
+				"type": "uint256"
+			}
+		],
+		"name": "_candidate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "voteCount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "nominationNo",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "name",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "partyShortcut",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "partyFlag",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint32",
+				"name": "stateCode",
+				"type": "uint32"
+			},
+			{
+				"internalType": "uint32",
+				"name": "constituencyCode",
+				"type": "uint32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "candidateCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "voterSaudiId",
+				"type": "uint256"
+			}
+		],
+		"name": "getCandidateList",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "voteCount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "nominationNo",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "name",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "partyShortcut",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "partyFlag",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "stateCode",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "constituencyCode",
+						"type": "uint32"
+					}
+				],
+				"internalType": "struct Ballot.Candidate[]",
+				"name": "cc",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCandidateResults",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "voteCount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "nominationNo",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "name",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "partyShortcut",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "partyFlag",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "stateCode",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "constituencyCode",
+						"type": "uint32"
+					}
+				],
+				"internalType": "struct Ballot.Candidate[]",
+				"name": "results",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentTimestamp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "CurrentTimestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getSecondsToStartTime",
+		"outputs": [
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getVotingEndTime",
+		"outputs": [
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getVotingStartTime",
+		"outputs": [
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalVoteCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]

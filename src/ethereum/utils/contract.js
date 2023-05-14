@@ -16,7 +16,7 @@ export const getSigner = () => {
 }
 
 const provider = getProvider();
-const ballotAddress = "0x9f58A1D06F9b730c86162DdEeBD42a720e17c41A";
+const ballotAddress = "0xd7B51d686bE66d8b97B44BB07214262dAC2DFddB";
 
 export const ballotContract = provider
   ? new ethers.Contract(ballotAddress, Ballot, provider)
