@@ -66,19 +66,19 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "name",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "partyShortcut",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "partyFlag",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
 						"internalType": "uint32",
@@ -197,19 +197,19 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "bytes32",
+				"internalType": "string",
 				"name": "name",
-				"type": "bytes32"
+				"type": "string"
 			},
 			{
-				"internalType": "bytes32",
+				"internalType": "string",
 				"name": "partyShortcut",
-				"type": "bytes32"
+				"type": "string"
 			},
 			{
-				"internalType": "bytes32",
+				"internalType": "string",
 				"name": "partyFlag",
-				"type": "bytes32"
+				"type": "string"
 			},
 			{
 				"internalType": "uint32",
@@ -261,19 +261,19 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "name",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "partyShortcut",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "partyFlag",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
 						"internalType": "uint32",
@@ -311,19 +311,19 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "name",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "partyShortcut",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "partyFlag",
-						"type": "bytes32"
+						"type": "string"
 					},
 					{
 						"internalType": "uint32",

@@ -28,9 +28,9 @@ contract Ballot is Ownable{
     struct Candidate {
         uint voteCount; 
         uint nominationNo; 
-        bytes32 name; 
-        bytes32 partyShortcut;
-        bytes32 partyFlag;
+        string name; 
+        string partyShortcut;
+        string partyFlag;
         uint32 stateCode;
         uint32 constituencyCode;
     }
@@ -177,9 +177,9 @@ contract Ballot is Ownable{
         Candidate memory newCandidate = Candidate({
             voteCount: 0,
             nominationNo: candidateCount+1,
-            name: bytes32(abi.encode(args.name)),
-            partyShortcut: bytes32(abi.encodePacked(args.partyShortCut)),
-            partyFlag: bytes32(abi.encode(args.partyFlag)),
+            name: args.name,
+            partyShortcut: args.partyShortCut,
+            partyFlag: args.partyFlag,
             stateCode: args.stateCode,
             constituencyCode: args.constituencyCode
         });
