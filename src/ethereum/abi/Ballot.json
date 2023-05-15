@@ -36,6 +36,46 @@
 		"type": "error"
 	},
 	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "partyShortCut",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "partyFlag",
+						"type": "string"
+					},
+					{
+						"internalType": "uint32",
+						"name": "stateCode",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "constituencyCode",
+						"type": "uint32"
+					}
+				],
+				"internalType": "struct Ballot.CandidateArgs",
+				"name": "args",
+				"type": "tuple"
+			}
+		],
+		"name": "registerCandidate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "VoterNotAlive",
 		"type": "error"
@@ -164,6 +204,43 @@
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "_SaudiId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint32",
+						"name": "constituencyCode",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "stateCode",
+						"type": "uint32"
+					}
+				],
+				"internalType": "struct Ballot.VoterArgs",
+				"name": "args",
+				"type": "tuple"
+			}
+		],
+		"name": "registerVoter",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -175,6 +252,58 @@
 		],
 		"name": "StartTimeUpdated",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint160",
+				"name": "_endTime",
+				"type": "uint160"
+			}
+		],
+		"name": "updateEndTime",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint160",
+				"name": "_startTime",
+				"type": "uint160"
+			}
+		],
+		"name": "updateStartTime",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "candidateNominationNo",
+				"type": "uint256"
+			}
+		],
+		"name": "vote",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -423,88 +552,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "partyShortCut",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "partyFlag",
-						"type": "string"
-					},
-					{
-						"internalType": "uint32",
-						"name": "stateCode",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint32",
-						"name": "constituencyCode",
-						"type": "uint32"
-					}
-				],
-				"internalType": "struct Ballot.CandidateArgs",
-				"name": "args",
-				"type": "tuple"
-			}
-		],
-		"name": "registerCandidate",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "_SaudiId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "_voterAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint32",
-						"name": "constituencyCode",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint32",
-						"name": "stateCode",
-						"type": "uint32"
-					}
-				],
-				"internalType": "struct Ballot.VoterArgs",
-				"name": "args",
-				"type": "tuple"
-			}
-		],
-		"name": "registerVoter",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "totalVoteCount",
 		"outputs": [
@@ -515,58 +562,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint160",
-				"name": "_endTime",
-				"type": "uint160"
-			}
-		],
-		"name": "updateEndTime",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint160",
-				"name": "_startTime",
-				"type": "uint160"
-			}
-		],
-		"name": "updateStartTime",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "candidateNominationNo",
-				"type": "uint256"
-			}
-		],
-		"name": "vote",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

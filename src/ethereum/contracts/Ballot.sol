@@ -177,7 +177,7 @@ contract Ballot is Ownable{
         Candidate memory newCandidate = Candidate({
             voteCount: 0,
             nominationNo: candidateCount+1,
-            name: args.name,
+            name: args.name                     ,
             partyShortcut: args.partyShortCut,
             partyFlag: args.partyFlag,
             stateCode: args.stateCode,
@@ -199,14 +199,13 @@ contract Ballot is Ownable{
     */
     struct VoterArgs{
         uint _SaudiId;
-        address _voterAddress;
         uint32 constituencyCode; 
         uint32 stateCode;
     }
     function registerVoter(
         VoterArgs memory args
-    ) external onlyOwner{
-        if (_voterSaudiId[args._voterAddress] != 0) revert AddressAlreadyRegistered();
+    ) external {
+        if (_voterSaudiId[msg.sender] != 0) revert AddressAlreadyRegistered();
 
         VoterDetails memory newVoter = VoterDetails({
             votedTo: 0,
@@ -218,8 +217,8 @@ contract Ballot is Ownable{
         });
 
         _voter[args._SaudiId] = newVoter;
-        _voter[args._SaudiId].registeredAccs.push(args._voterAddress);
-        _voterSaudiId[args._voterAddress] = args._SaudiId;
+        _voter[args._SaudiId].registeredAccs.push(msg.sender);
+        _voterSaudiId[msg.sender] = args._SaudiId;
     }
 
     /* View Functions */
