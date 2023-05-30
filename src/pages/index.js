@@ -52,7 +52,7 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-8 text-black rounded-lg shadow-lg w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+                <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
                 <input
                     type="text"
                     placeholder="Name"
